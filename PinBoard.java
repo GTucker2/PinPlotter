@@ -107,7 +107,7 @@ public class PinBoard {
                     iCols++;
                 }
                 line = dtmReader.readLine();
-                info = line.split(" ");
+                info = line.split(" ");nbmnb 
                 iCols = 0;
                 iRows++;
             }
@@ -120,7 +120,7 @@ public class PinBoard {
 
     private Pins[][] PinsFromEls(int nCols, int nRows, int cellSize, float swLong, float swLat, float[][] landEls, float[][] wtEls) {
         longi = swLong;
-        lati = swLat; 
+        lati = swLat;
         pins = new Pin[nCols][nRows];
         for (int iCol = 0; iCol < nCols; iCol++) {
             for (int iRow = nRows-1; iRow >= 0; iRow--) {
