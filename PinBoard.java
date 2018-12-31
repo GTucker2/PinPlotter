@@ -81,10 +81,6 @@ public class PinBoard {
             }
             float[][] els = ElsFromDTM(nCols, nRows, dtmReader);
             this.pins = PinsFromEls();
-            this.nCols = nCols;
-            this.nRows = nRows;
-            this.swLong = swLong;
-            this.swLat = swLat;
         }
         catch(FileNotFoundException ex) {
             System.out.println("Unable to open file: " + dtmPath);
@@ -98,16 +94,16 @@ public class PinBoard {
         try {
             String line = dtmReader.readLine();
             String[] info = line.split(" ");
-            float[][] els = float[nCols][nRows];
+            float[][] els = new float[nCols][nRows];
             int iCols = 0;
             int iRows = 0;
             while(line != null) {
-                for (String landEl : line) {
+                for (String landEl : info) {
                     els[iCols][iRows] = Float.parseFloat(info[iCols]);
                     iCols++;
                 }
                 line = dtmReader.readLine();
-                info = line.split(" ");nbmnb 
+                info = line.split(" ");
                 iCols = 0;
                 iRows++;
             }
@@ -124,7 +120,7 @@ public class PinBoard {
         pins = new Pin[nCols][nRows];
         for (int iCol = 0; iCol < nCols; iCol++) {
             for (int iRow = nRows-1; iRow >= 0; iRow--) {
-                if(!landEls)
+                if(landEls != null)
                     this.pins[iCol][iRow] = new Pin(longi, lati, landEls[iCol][iRow]);
                 else this.pins[iCol][iRow] = new Pin(longi, lati, DFLT_NODATA);
                 lati += cellSize;

@@ -1,3 +1,4 @@
+package pinplotter;
 class Pin():
     """ The pin class is defined by the locational data of a point
     on the Earth.
