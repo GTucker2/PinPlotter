@@ -5,5 +5,8 @@ public interface Pin {
     void addPin(int x, int y, float val);
     void removePin(int x, int y);
     float evalPin(int x, int y);
+    public static enum PinType {
+        SURF_PIN, WT_PIN;
+    }
     //void drawPin();
 }

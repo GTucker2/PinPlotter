@@ -6,21 +6,14 @@ public class PinFactory {
     public static Pin getPin(PinType type) {
         Pin pinImpl = pins.get(type);
         if (pinImpl == null) {
-            if (type.equals(SURF_PIN)) {
-                pinImpl = new SurfPin ();
+            if (type.equals(PinType.SURF_PIN)) {
+                pinImpl = new DEMPin(PinType.SURF_PIN);
             }
-            else if (WT_PIN) {
-                pinImpl = new WtPin ();
-            }
-            else if (WAYPOINT) {
-                //pinImpl = new Waypoint ();
+            else if (type.equals(Pintype.WT_PIN)) {
+                pinImpl = new DEMPin(PinType.WT_PIN);
             }
             pins.put(type, pinImpl);
         }
         return pinImpl;
-    }
-
-    public static enum PinType {
-        SURF_PIN, WT_PIN, WAYPOINT;
     }
 }
