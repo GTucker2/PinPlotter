@@ -15,7 +15,7 @@ public class DEMParser {
             System.out.println("File not found!");
         } catch (IllegalArgumentException e) {
             System.out.println("Unsupported file!");
-        }
+        } 
     }
 
     /**
@@ -25,20 +25,20 @@ public class DEMParser {
      */
     private static File retrieveFile (String filePath) 
     throws FileNotFoundException, IllegalArgumentException {
-
+        
         // Check parameter validity; fail if filePath is empty.
-        if(filePath.length() == 0 || filePath == null)
+        if(filePath == null)
             throw new IllegalArgumentException("Invalid file path; file path is empty.");
 
         // Create file object and check validity.
         File f = new File(filePath);
         if(!f.exists() || f.isDirectory())
             throw new FileNotFoundException("Invalid file path; file does not exist.");
-
+            
         // Retrieve file extension and check validity. 
         String filePathLC = filePath.toLowerCase();
-        String[] directoriesAndName = filePathLC.split("\\");
-        String[] nameAndExtention = directoriesAndName[directoriesAndName.length-1].split(".");
+        String[] directoriesAndName = filePathLC.split("\\\\");
+        String[] nameAndExtention = directoriesAndName[directoriesAndName.length-1].split("[.]");
         String extension = nameAndExtention[nameAndExtention.length-1];
         if (!SupportedExtension.supports(extension)) 
             throw new IllegalArgumentException("Invalid file extension.");
@@ -49,7 +49,7 @@ public class DEMParser {
 
     private enum SupportedExtension {
 
-        ASC (".asc");
+        ASCII_GRID ("asc");
     
         private final String extension;
         
@@ -76,9 +76,10 @@ public class DEMParser {
          */
         static Boolean supports(String extension) {
             for (SupportedExtension ext : SupportedExtension.values())
+            {
                 if (ext.getExtension().equals(extension)) return true;
+            }
             return false;
-     
         }
     }
 }
