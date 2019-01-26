@@ -1,13 +1,13 @@
 package goldfinder;
 
 import java.util.Scanner;
-import goldfinder.demset.DEMParser;
+import goldfinder.demset.*;
 import java.lang.IllegalArgumentException;
 
 public class GoldFinder {
     public static void main(String[] args) {
         try {
-            DEMParser.parseFile(args[0]);
+            ASCParser.parseFile(args[0]);
         } catch (IllegalArgumentException e) {
             System.out.println("No filepath provided. Execution terminated.");
         }

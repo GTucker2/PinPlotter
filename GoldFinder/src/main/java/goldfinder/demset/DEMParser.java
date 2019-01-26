@@ -6,16 +6,22 @@ import java.lang.IllegalArgumentException;
 
 public class DEMParser {
 
-    private DEMParser () {}
+    private DEMParser() {}
 
-    public static void parseFile(String filePath) {
-        try {
-            File demFile = retrieveFile(filePath);
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found!");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Unsupported file!");
+    public static DEMMap parseFile (String filePath) {
+        // Attempt to retrieve the file specified by filePath.
+        try { 
+            File file = retrieveFile(filePath); 
+        }
+        catch (FileNotFoundException e) {
+            throw new FileNotFoundException("File not found; enter a valid filepath."); 
+        }
+        catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid filepath; please enter "); 
         } 
+
+        // Generate and return the demmap from the .asc
+        return new DEMMap(file);
     }
 
     /**
