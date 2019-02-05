@@ -1,57 +1,74 @@
+package goldfinder.demset;
+import java.util.HashMap;
+import java.io.File;
+import java.io.FileReader;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class DEMSet {
 
     private static final int TOTAL_PARAMS = 6;
-    private final int N_COLS;
-    private final int N_ROWS; 
-    private final float XLL_CORNER;
-    private final float YLL_CORNER;
-    private final float CELL_SIZE;
-    private final float NODATA_VALUE;
-    private final HashMap<int, float> DEMVals = new HashMap<int, float>();
-
-    public DEMSet (String filePath) {
-        try {
-            File file = new File(filePath);
-            this(file);
-        } catch (FileNotFoundException e)
-    }
+    private int N_COLS;
+    private int N_ROWS; 
+    private float XLL_CORNER;
+    private float YLL_CORNER;
+    private float CELL_SIZE;
+    private float NODATA_VALUE;
+    private final HashMap<Float, Float> DEMVals = new HashMap<Float, Float>();
 
     public DEMSet (File file) {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line;
+            String line, tag;
             String [] vals;
             int paramsMet = 0;
-            while ((line = br.readLine()) != Null) {
-                vals = line.split([ ]);
-                if      (vals[0].compare("ncols")) N_COLS = vals[1];
-                else if (vals[0].compare("nrows")) N_ROWS = vals[1];
-                else if (vals[0].compare("xllcorner")) XLL_CORNER = vals[1];
-                else if (vals[0].compare("yllcorner")) YLL_CORNER = vals[1];
-                else if (vals[0].compare("cellsize")) CELL_SIZE = vals[1];
-                else if (vals[0].compare("NODATA_value")) NODATA_VALUE = vals[1];
+            float yOffset = 0;
+            while ((line = br.readLine()) != null) {
+                vals = line.split("\\s+");
+                tag = vals[0];
+                if      (tag.equals("ncols")) N_COLS = Integer.parseInt(vals[1]);
+                else if (tag.equals("nrows")) N_ROWS = Integer.parseInt(vals[1]);
+                else if (tag.equals("xllcorner")) XLL_CORNER = Float.parseFloat(vals[1]);
+                else if (tag.equals("yllcorner")) YLL_CORNER = Float.parseFloat(vals[1]);
+                else if (tag.equals("cellsize")) CELL_SIZE = Float.parseFloat(vals[1]);
+                else if (tag.equals("NODATA_value")) NODATA_VALUE = Float.parseFloat(vals[1]);
                 else {
-                    if (paramsMet < TOTAL_PARAMS)
+                    if (paramsMet < TOTAL_PARAMS) {
                         throw new IllegalArgumentException();
+                    }
                     else {
                         // map a line of values here
-                        for (int val : vals) mapVal(val, ____, ____);
+                        System.out.println(yOffset);
+                        mapVals(vals, yOffset);
+                        yOffset += CELL_SIZE;
                         continue;
                     }
                 }
                 paramsMet++;
             }
         }
-        catch (IllegalArgumentException) 
+        catch (IllegalArgumentException e) {
+            System.out.println("Illegal argument exception!");
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("File Not Found!");
+        }
+        catch (IOException e) {
+            System.out.println("IOException!");
+        }
     }
 
-    private void mapVal(int x, int y, float val)
+    private void mapVals(String[] vals, float yOffset)
     throws IllegalArgumentException {
-        DEMVals.put(XYHash(x, y), val);
+        float x = XLL_CORNER;
+        float y = YLL_CORNER + yOffset;
+        for (int i = 1; i < vals.length; i++) {
+            DEMVals.put(getCantorKey(x, y), Float.parseFloat(vals[i]));
+            x += CELL_SIZE;
+        }
     }
 
-    private int XYHash(int x, int y) {
-
+    private float getCantorKey(float x, float y) {
+        return ((x + y)*(x + y + 1)/2) + y;
     }
 }

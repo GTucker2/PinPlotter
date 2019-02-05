@@ -30,7 +30,7 @@ dependencies {
 task run(type: JavaExec, overwrite: true) {
     main = "goldfinder.GoldFinder"
     classpath = sourceSets.main.runtimeClasspath
-    args = ["arg1"]
+    args = ["$arg1"]
 }
 
 // tag::wrapper[]
